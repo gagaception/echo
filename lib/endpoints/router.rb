@@ -32,8 +32,8 @@ module Endpoints
 
       def define_route(endpoint)
         Echo::Application.routes.draw do
-          self.send(
-            :match,
+          send(
+            :get,
             endpoint.path,
             to: 'endpoints#serve_mock_endpoint',
             defaults: { mock_endpoint_id: endpoint.id },

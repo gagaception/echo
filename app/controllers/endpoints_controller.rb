@@ -1,33 +1,48 @@
 class EndpointsController < ApplicationController
-  before_action :load_endpoint, only: [:update, :destroy]
   after_action :reload_routes, only: [:update, :create, :destroy]
 
   def index
-    render json: Endpoint.all
+    endpoints = Endpoint.all.map do |endpoint|
+      Endpoints::DecoratorService.new(endpoint).result
+    end
+    render json: endpoints
   end
 
   def create
-    endpoint = Endpoint.new(endpoint_params)
-    if endpoint.save
-      render json: endpoint
+    endpoint = Endpoints::UpsertService.new.call(
+      endpoint_params: endpoint_params.to_h,
+    )
+
+    if endpoint.success?
+      render json: endpoint.success
     else
       @skip_reloading = true
-      render json: { errors: endpoint.errors.full_messages }, status: 422
+      render json: { errors: endpoint.failure }, status: 422
     end
   end
 
   def update
-    if @endpoint.update(endpoint_params)
-      render json: @endpoint
+    endpoint = Endpoints::UpsertService.new.call(
+      endpoint_params: endpoint_params.to_h,
+      endpoint_id: params[:id].to_i,
+    )
+
+    if endpoint.success?
+      render json: endpoint.success
     else
       @skip_reloading = true
-      render json: { errors: @endpoint.errors.full_messages }, status: 422
+      render json: { errors: endpoint.failure }, status: 422
     end
+  rescue ActiveRecord::RecordNotFound
+    record_not_found
   end
 
   def destroy
-    @endpoint.destroy
+    endpoint = Endpoint.find(params[:id])
+    endpoint.destroy
     render json: { message: "Endpoint successfully deleted" }
+  rescue ActiveRecord::RecordNotFound
+    record_not_found
   end
 
   def serve_mock_endpoint
@@ -37,14 +52,14 @@ class EndpointsController < ApplicationController
   private
 
   def endpoint_params
-    params.require(:data).permit(attributes: [:verb, :path, response: [:code, :body, headers: {}]])
-  end
-
-  def load_endpoint
-    @endpoint = Endpoint.find(params[:id])
+    params.require(:endpoint).permit(:verb, :path, response: {})
   end
 
   def reload_routes
     Endpoints::Router.reload_routes! unless @skip_reloading
+  end
+
+  def record_not_found
+    render json: { errors: [{ code: "not_found", detail: "Requested Endpoint with ID #{params[:id]} does not exist" }] }, status: 404
   end
 end

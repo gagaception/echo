@@ -1,6 +1,4 @@
 class Endpoint < ApplicationRecord
-  validates :verb, :path, :response, presence: true
-
   after_save :register
   after_destroy :unregister
 

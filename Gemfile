@@ -32,6 +32,9 @@ gem "bootsnap", require: false
 
 gem "pg"
 
+gem "dry-monads", "~> 1.3"
+gem "dry-validation", "~> 1.0"
+
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem "rack-cors"
 
