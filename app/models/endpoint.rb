@@ -7,10 +7,10 @@ class Endpoint < ApplicationRecord
   private
 
   def register
-    Endpoints::Router.register_endpoint self
+    Endpoints::Router.register_endpoint self.id
   end
 
   def unregister
-    Endpoints::Router.unregister_endpoint self
+    Endpoints::Router.unregister_endpoint self.id
   end
 end

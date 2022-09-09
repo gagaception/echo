@@ -31,9 +31,7 @@ class EndpointsController < ApplicationController
   end
 
   def serve_mock_endpoint
-    mock_endpoint = Endpoint.find params[:mock_endpoint_id]
-
-    render json: mock_endpoint
+    render json: Endpoint.find(params[:mock_endpoint_id])
   end
 
   private

@@ -2,12 +2,10 @@ module Endpoints
   class Router
     METHODS = [:get, :post, :put, :patch, :delete, :options, :head].freeze
 
-    REGISTERED_ENDPOINT_IDS = []
+    REGISTERED_ENDPOINT_IDS = Endpoint.pluck(:id)
 
     class << self
       def load_endpoints_routes!
-        Endpoint.all.each { |endpoint| REGISTERED_ENDPOINT_IDS << endpoint.id }
-
         endpoints = REGISTERED_ENDPOINT_IDS.map do |endpoint_id|
           Endpoint.find endpoint_id
         end
@@ -17,21 +15,18 @@ module Endpoints
         end
       end
 
+      def register_endpoint(endpoint_id)
+        REGISTERED_ENDPOINT_IDS << endpoint_id
+        REGISTERED_ENDPOINT_IDS.uniq!
+      end
+
+      def unregister_endpoint(endpoint_id)
+        REGISTERED_ENDPOINT_IDS.delete endpoint_id
+      end
+
       def reload_routes!
         Echo::Application.routes_reloader.reload!
       end
-
-      def register_endpoint(endpoint)
-        REGISTERED_ENDPOINT_IDS << endpoint.id
-        REGISTERED_ENDPOINT_IDS.uniq!
-        reload_routes!
-      end
-
-      def unregister_endpoint(endpoint)
-        REGISTERED_ENDPOINT_IDS.delete endpoint.id
-        reload_routes!
-      end
-
 
       private
 

@@ -7,5 +7,7 @@ Rails.application.routes.draw do
   patch "endpoints/:id", to: "endpoints#update"
   resources :endpoints, except: [:show, :update]
 
+  get '*path', to: 'errors#error_404', via: :all
+
   Endpoints::Router.load_endpoints_routes!
 end
