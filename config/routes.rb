@@ -10,4 +10,6 @@ Rails.application.routes.draw do
   resources :endpoints, except: [:show, :update]
 
   Endpoints::Router.load_endpoints_routes!
+
+  match '*path' => 'errors#error_404', via: :all
 end
