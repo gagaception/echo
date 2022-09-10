@@ -6,6 +6,8 @@ module Endpoints
 
     class << self
       def load_endpoints_routes!
+        register_existing_endpoints
+        
         endpoints = REGISTERED_ENDPOINT_IDS.map do |endpoint_id|
           Endpoint.find endpoint_id
         end
@@ -15,7 +17,7 @@ module Endpoints
         end
       end
 
-      def register_existing_endpoint
+      def register_existing_endpoints
         REGISTERED_ENDPOINT_IDS << Endpoint.pluck(:id)
         REGISTERED_ENDPOINT_IDS.flatten!
         REGISTERED_ENDPOINT_IDS.uniq!
@@ -36,7 +38,7 @@ module Endpoints
 
       def reset!
         REGISTERED_ENDPOINT_IDS.clear
-        register_existing_endpoint
+        register_existing_endpoints
         reload_routes!
       end
 

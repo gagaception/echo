@@ -36,11 +36,11 @@ module Endpoints
       end
     end
 
-    describe '.register_existing_endpoint' do
+    describe '.register_existing_endpoints' do
       let(:endpoint) { create(:endpoint) }
 
       it 'should register the endpoint' do
-        Router.register_existing_endpoint
+        Router.register_existing_endpoints
 
         expect(Router::REGISTERED_ENDPOINT_IDS).to eq [endpoint.id]
       end
@@ -79,7 +79,7 @@ module Endpoints
       let(:endpoint) { create(:endpoint) }
 
       it 'should reset the router' do
-        Router.register_existing_endpoint
+        Router.register_existing_endpoints
 
         Router.reset!
 
