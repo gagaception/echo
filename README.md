@@ -19,4 +19,4 @@ In order to expose this API to the proper consumers it is relevant to expose cle
 
 The best way to document a REST API is to expose a Swagger file and define on that file all their requirements that each endpoint needs for its proper operation.
 
-Swagger UI [localhost:3000/api-docs](localhost:3000/api-docs)
+Swagger UI [api-docs](localhost:3000/api-docs)
