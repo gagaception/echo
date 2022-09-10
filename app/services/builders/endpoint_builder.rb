@@ -1,7 +1,5 @@
-module Endpoints
-  class UpsertService
-    include Dry::Monads[:result, :do]
-
+module Builders
+  class EndpointBuilder
     ALLOWED_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"].freeze
 
     class Schema < Dry::Validation::Contract
@@ -15,32 +13,12 @@ module Endpoints
             optional(:headers)
           end
         end
-        optional(:endpoint_id).filled(:integer)
       end
 
       rule(endpoint_params: :verb) do
         key.failure("invalid verb") unless value.in? ALLOWED_METHODS
       end
     end
-    
-    def call(params)
-      result = yield validate(params)
-
-      if result[:endpoint_id]
-        endpoint = Endpoint.find(result[:endpoint_id])
-        if endpoint
-          endpoint.update(result[:endpoint_params])
-        else
-          raise StandardError
-        end
-      else
-        endpoint = Endpoint.create(result[:endpoint_params])
-      end
-    
-      Success(Endpoints::DecoratorService.new(endpoint).call)
-    end
-
-    private
 
     def validate(payload)
       result = self.class::Schema.new.call(payload)

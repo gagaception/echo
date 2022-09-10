@@ -79,6 +79,11 @@ RSpec.describe EndpointsController, type: :controller do
         patch :update, params: { id: endpoint.id, endpoint: endpoint_params }
         expect(response).to_not be_successful
       end
+
+      it 'should return failure if endpoint does not exist' do
+        patch :update, params: { id: endpoint.id + 1, endpoint: endpoint_params }
+        expect(response).to_not be_successful
+      end
     end
   end
   

@@ -9,7 +9,7 @@ class EndpointsController < ApplicationController
   end
 
   def create
-    endpoint = Endpoints::UpsertService.new.call(
+    endpoint = Endpoints::CreateService.new.call(
       endpoint_params: endpoint_params.to_h,
     )
 
@@ -22,7 +22,7 @@ class EndpointsController < ApplicationController
   end
 
   def update
-    endpoint = Endpoints::UpsertService.new.call(
+    endpoint = Endpoints::UpdateService.new.call(
       endpoint_params: endpoint_params.to_h,
       endpoint_id: params[:id].to_i,
     )
