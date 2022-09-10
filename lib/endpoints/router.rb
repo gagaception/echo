@@ -49,8 +49,8 @@ module Endpoints
           send(
             :match,
             endpoint.path,
-            to: 'endpoints#serve_mock_endpoint',
-            defaults: { mock_endpoint_id: endpoint.id },
+            to: 'serve_endpoints#serve_mock_endpoint',
+            defaults: { endpoint_id: endpoint.id },
             via: endpoint.verb
           )
         end

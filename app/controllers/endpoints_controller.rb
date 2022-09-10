@@ -45,10 +45,6 @@ class EndpointsController < ApplicationController
     record_not_found
   end
 
-  def serve_mock_endpoint
-    render json: Endpoint.find(params[:mock_endpoint_id])
-  end
-
   private
 
   def endpoint_params
