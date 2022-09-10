@@ -1,11 +1,10 @@
-module Endpoints
-  class DecoratorService < SimpleDelegator
-    def initialize(endpoint)
-      @endpoint = endpoint
-    end
+RSpec.describe Endpoints::DecoratorService, type: :service do
+  describe '#call' do
+    let(:endpoint) { create(:endpoint) }
 
-    def call
-      {
+    it 'should return a hash with the endpoint attributes' do
+      result = described_class.new(endpoint).call
+      expect(result).to eq(
         data: {
           type: 'endpoints',
           id: endpoint.id,
@@ -19,11 +18,7 @@ module Endpoints
             }
           }
         }
-      }
+      )
     end
-
-    private
-
-    attr_reader :endpoint
   end
 end

@@ -3,7 +3,7 @@ class EndpointsController < ApplicationController
 
   def index
     endpoints = Endpoint.all.map do |endpoint|
-      Endpoints::DecoratorService.new(endpoint).result
+      Endpoints::DecoratorService.new(endpoint).call
     end
     render json: endpoints
   end

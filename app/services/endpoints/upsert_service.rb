@@ -37,7 +37,7 @@ module Endpoints
         endpoint = Endpoint.create(result[:endpoint_params])
       end
     
-      Success(Endpoints::DecoratorService.new(endpoint).result)
+      Success(Endpoints::DecoratorService.new(endpoint).call)
     end
 
     private

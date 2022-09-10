@@ -19,7 +19,7 @@ RSpec.describe EndpointsController, type: :controller do
     it 'should return a list of endpoints' do
       endpoint = create(:endpoint)
       get :index
-      expect(response.body).to eq [Endpoints::DecoratorService.new(endpoint).result].to_json
+      expect(response.body).to eq [Endpoints::DecoratorService.new(endpoint).call].to_json
     end
 
     it 'should return [] when no Endpoints' do
