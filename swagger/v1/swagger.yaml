@@ -1,0 +1,110 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/endpoints":
+    get:
+      summary: LIST ENDPOINTS
+      tags:
+      - Endpoints
+      responses:
+        '200':
+          description: successful
+    post:
+      summary: CREATE ENDPOINT
+      tags:
+      - Endpoints
+      parameters: []
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verb:
+                  type: string
+                  example: GET
+                path:
+                  type: string
+                  example: "/foo"
+                response:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                      example: 200
+                    headers:
+                      type: object
+                      example:
+                        Content-Type: application/json
+                    body:
+                      type: string
+                      example: foobar
+              required:
+              - verb
+              - path
+              - response
+  "/endpoints/{id}":
+    patch:
+      summary: UPDATE ENDPOINT
+      tags:
+      - Endpoints
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                verb:
+                  type: string
+                  example: GET
+                path:
+                  type: string
+                  example: "/foo"
+                response:
+                  type: object
+                  properties:
+                    code:
+                      type: integer
+                      example: 200
+                    headers:
+                      type: object
+                      example:
+                        Content-Type: application/json
+                    body:
+                      type: string
+                      example: foobar
+              required:
+              - verb
+              - path
+              - response
+    delete:
+      summary: DELETE ENDPOINT
+      tags:
+      - Endpoints
+      parameters:
+      - name: id
+        in: path
+        description: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+servers:
+- url: http://localhost:3000

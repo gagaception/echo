@@ -12,7 +12,7 @@ module Endpoints
           required(:response).hash do
             required(:code).filled(:integer)
             required(:body).filled(:string)
-            optional(:headers).filled(:hash)
+            optional(:headers)
           end
         end
         optional(:endpoint_id).filled(:integer)
