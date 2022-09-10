@@ -2,7 +2,7 @@ module Endpoints
   class Router
     METHODS = [:get, :post, :put, :patch, :delete, :options, :head].freeze
 
-    REGISTERED_ENDPOINT_IDS = Endpoint.pluck(:id)
+    REGISTERED_ENDPOINT_IDS = []
 
     class << self
       def load_endpoints_routes!
@@ -13,6 +13,12 @@ module Endpoints
         endpoints.each do |endpoint|
           define_route endpoint
         end
+      end
+
+      def register_existing_endpoint
+        REGISTERED_ENDPOINT_IDS << Endpoint.pluck(:id)
+        REGISTERED_ENDPOINT_IDS.flatten!
+        REGISTERED_ENDPOINT_IDS.uniq!
       end
 
       def register_endpoint(endpoint_id)
@@ -26,6 +32,12 @@ module Endpoints
 
       def reload_routes!
         Echo::Application.routes_reloader.reload!
+      end
+
+      def reset!
+        REGISTERED_ENDPOINT_IDS.clear
+        register_existing_endpoint
+        reload_routes!
       end
 
       private
